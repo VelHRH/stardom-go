@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/VelHRH/stardom-go/back/models"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -22,4 +23,5 @@ func Connect() {
 		panic("Could not connect to db.")
 	}
 	DB = db
+	db.AutoMigrate(&models.User{})
 }
