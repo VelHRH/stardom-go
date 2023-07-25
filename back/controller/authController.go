@@ -3,10 +3,13 @@ package controller
 import (
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/VelHRH/stardom-go/back/database"
 	"github.com/VelHRH/stardom-go/back/models"
+	"github.com/VelHRH/stardom-go/back/util"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -50,4 +53,47 @@ func Register(context *fiber.Ctx) error {
 
 	context.Status(200)
 	return context.JSON(fiber.Map{"user": user, "message": "Account created successfuly."})
+}
+
+func Login(c *fiber.Ctx) error {
+	var data map[string]string
+
+	if err := c.BodyParser(&data); err != nil {
+		fmt.Println("Unable to parse body")
+	}
+
+	var user models.User
+	database.DB.Where("email=?", data["email"]).First(&user)
+	if user.Id == 0 {
+		c.Status(404)
+		return c.JSON(fiber.Map{
+			"message": "Incorrect login or password",
+		})
+	}
+
+	if err := user.ComparePassword(data["password"]); err != nil {
+		c.Status(400)
+		return c.JSON(fiber.Map{
+			"message": "Incorrect login or password",
+		})
+	}
+
+	token, err := util.GenerateJwt(strconv.Itoa(int(user.Id)))
+	if err != nil {
+		c.Status(fiber.StatusInternalServerError)
+		return nil
+	}
+
+	cookie := fiber.Cookie{
+		Name:     "jwt",
+		Value:    token,
+		Expires:  time.Now().Add(time.Hour * 24),
+		HTTPOnly: true,
+	}
+
+	c.Cookie(&cookie)
+	return c.JSON(fiber.Map{
+		"message": "Success",
+		"user":    user,
+	})
 }

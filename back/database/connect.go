@@ -21,6 +21,8 @@ func Connect() {
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("Could not connect to db.")
+	} else {
+		log.Println("Db connected.")
 	}
 	DB = db
 	db.AutoMigrate(&models.User{})
