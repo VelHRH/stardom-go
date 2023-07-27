@@ -10,6 +10,7 @@ import (
 	"github.com/VelHRH/stardom-go/back/database"
 	"github.com/VelHRH/stardom-go/back/models"
 	"github.com/VelHRH/stardom-go/back/util"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -96,4 +97,8 @@ func Login(c *fiber.Ctx) error {
 		"message": "Success",
 		"user":    user,
 	})
+}
+
+type Claims struct {
+	jwt.StandardClaims
 }
