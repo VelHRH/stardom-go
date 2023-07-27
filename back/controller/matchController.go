@@ -22,6 +22,26 @@ func CreateMatch(c *fiber.Ctx) error {
 		})
 	}
 	c.Status(200)
-	fmt.Println("Success")
 	return c.JSON(fiber.Map{"match": match, "message": "Match created successfuly."})
+}
+
+func GetAllMatches(c *fiber.Ctx) error {
+	var matches []models.Match
+
+	if err := database.DB.Find(&matches).Error; err != nil {
+		fmt.Println("Unable to get matches")
+	}
+	c.Status(200)
+	return c.JSON(matches)
+}
+
+func GetMatchesByRating(c *fiber.Ctx) error {
+	rating := c.Params("Rating")
+	var matches []models.Match
+
+	if err := database.DB.Where("Rating = ?", rating).Find(&matches).Error; err != nil {
+		fmt.Println("Unable to get matches")
+	}
+	c.Status(200)
+	return c.JSON(matches)
 }
