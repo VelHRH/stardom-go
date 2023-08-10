@@ -1,10 +1,36 @@
-import { LogIn } from "lucide-react";
-import { FC, useState } from "react";
+import { LogIn, LogOut } from "lucide-react";
+import { FC, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import LoginForm from "./LoginForm";
 
 const Navbar: FC = () => {
  const [isLogIn, setIsLogIn] = useState<boolean>(false);
+ const [userData, setUserData] = useState<User>();
 
+ const navigate = useNavigate();
+
+ const logout = async () => {
+  const res = await fetch(`${import.meta.env.VITE_API_HOST}/logout`, {
+   method: "POST",
+   credentials: "include",
+   headers: {
+    "Content-Type": "application/json",
+   },
+  });
+  const response = await res.json();
+  if (response.message === "Success") {
+   setUserData(undefined);
+   localStorage.removeItem("user");
+   navigate("/");
+  }
+ };
+
+ useEffect(() => {
+  const user = localStorage.getItem("user");
+  if (user) {
+   setUserData(JSON.parse(user));
+  }
+ }, [userData]);
  return (
   <>
    {isLogIn && (
@@ -48,13 +74,24 @@ const Navbar: FC = () => {
        </g>
       </svg>
      </a>
-     <button
-      onClick={() => setIsLogIn(true)}
-      className="flex gap-2 items-center text-4xl font-semibold text-slate-50 hover:scale-110 duration-300"
-     >
-      <LogIn size={50} />
-      Login
-     </button>
+
+     {userData ? (
+      <button
+       onClick={() => logout()}
+       className="flex gap-2 items-center text-4xl font-semibold text-slate-50 hover:scale-110 duration-300"
+      >
+       <LogOut size={50} />
+       Logout
+      </button>
+     ) : (
+      <button
+       onClick={() => setIsLogIn(true)}
+       className="flex gap-2 items-center text-4xl font-semibold text-slate-50 hover:scale-110 duration-300"
+      >
+       <LogIn size={50} />
+       Login
+      </button>
+     )}
     </div>
    </div>
   </>

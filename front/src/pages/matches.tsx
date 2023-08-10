@@ -4,7 +4,6 @@ import { fetcher } from "../utils";
 
 const Matches: FC = () => {
  const { data, isLoading } = useSWR("/match", fetcher);
- console.log(data);
  if (isLoading) return <div className="text-white">Loading...</div>;
  return <div className="text-white">{JSON.stringify(data)}</div>;
 };

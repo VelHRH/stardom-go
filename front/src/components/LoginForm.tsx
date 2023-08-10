@@ -8,9 +8,23 @@ interface FormData {
 
 const LoginForm: FC = () => {
  const { register, handleSubmit } = useForm<FormData>();
- const onSubmit = (data: { email: string; password: string }) => {
-  alert(JSON.stringify(data));
+
+ const onSubmit = async (data: FormData) => {
+  const res = await fetch(`${import.meta.env.VITE_API_HOST}/login`, {
+   method: "POST",
+   credentials: "include",
+   headers: {
+    "Content-Type": "application/json",
+   },
+   body: JSON.stringify(data),
+  });
+  const user = await res.json();
+  if (user.message === "Success") {
+   localStorage.setItem("user", JSON.stringify(user.user));
+   window.location.reload();
+  }
  };
+
  return (
   <form
    onSubmit={handleSubmit(onSubmit)}
