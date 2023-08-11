@@ -1,3 +1,4 @@
+import { Loader2 } from "lucide-react";
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -14,6 +15,8 @@ interface AddMatchProps {
 
 const AddMatch: FC<AddMatchProps> = ({ curYear }) => {
  const [isForm, setIsForm] = useState<boolean>(false);
+ const [isLoading, setIsLoading] = useState<boolean>(false);
+
  const {
   register,
   handleSubmit,
@@ -21,6 +24,7 @@ const AddMatch: FC<AddMatchProps> = ({ curYear }) => {
  } = useForm<FormData>({ mode: "onBlur" });
 
  const onSubmit = async (data: FormData) => {
+  setIsLoading(true);
   const res = await fetch(`${import.meta.env.VITE_API_HOST}/match`, {
    method: "POST",
    credentials: "include",
@@ -33,6 +37,7 @@ const AddMatch: FC<AddMatchProps> = ({ curYear }) => {
   if (match.message === "Success") {
    window.location.reload();
   }
+  setIsLoading(false);
  };
 
  return (
@@ -101,11 +106,9 @@ const AddMatch: FC<AddMatchProps> = ({ curYear }) => {
         <p className="text-red-600">{errors.rating.message || "Error"}</p>
        )}
       </div>
-      <input
-       type="submit"
-       value="Add"
-       className="w-full text-center py-2 text-2xl font-semibold bg-gradient-to-r from-violet-500 to-fuchsia-500 text-slate-50 rounded-xl cursor-pointer hover:scale-105 duration-300"
-      />
+      <button className="w-full py-2 text-2xl font-semibold bg-gradient-to-r from-violet-500 to-fuchsia-500 text-slate-50 rounded-xl cursor-pointer hover:scale-105 duration-300 flex justify-center items-center gap-2">
+       {isLoading && <Loader2 className="animate-spin" />} Add{" "}
+      </button>
      </form>
     </div>
    )}

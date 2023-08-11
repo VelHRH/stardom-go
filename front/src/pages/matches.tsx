@@ -9,7 +9,7 @@ import { fetcher } from "../utils";
 const Matches: FC = () => {
  const navigate = useNavigate();
  const [searchParams, setSearchParams] = useSearchParams();
- const { data, isLoading, error } = useSWR<Match[]>("/match", fetcher);
+ const { data, isLoading, error, mutate } = useSWR<Match[]>("/match", fetcher);
  if (isLoading) return <div className="text-white">Loading...</div>;
  if (error || !data) {
   navigate("/");
@@ -62,6 +62,7 @@ const Matches: FC = () => {
        name={match.match}
        show={match.show}
        rating={match.rating}
+       mutate={mutate}
       />
      ))}
    </div>

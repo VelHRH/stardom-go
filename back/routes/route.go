@@ -14,4 +14,5 @@ func Setup(app *fiber.App) {
 	app.Post("/api/logout", controller.Logout)
 	app.Post("/api/match", controller.CreateMatch)
 	app.Get("/api/match/:Rating", controller.GetMatchesByRating)
+	app.Delete("/api/match", controller.DeleteMatch)
 }

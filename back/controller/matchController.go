@@ -22,7 +22,7 @@ func CreateMatch(c *fiber.Ctx) error {
 		})
 	}
 	c.Status(200)
-	return c.JSON(fiber.Map{"match": match, "message": "Match created successfuly."})
+	return c.JSON(fiber.Map{"match": match, "message": "Success"})
 }
 
 func GetAllMatches(c *fiber.Ctx) error {
@@ -44,4 +44,32 @@ func GetMatchesByRating(c *fiber.Ctx) error {
 	}
 	c.Status(200)
 	return c.JSON(matches)
+}
+
+func DeleteMatch(c *fiber.Ctx) error {
+	var match struct {
+		Match string `json:"match"`
+		Show  string `json:"show"`
+	}
+
+	if err := c.BodyParser(&match); err != nil {
+		fmt.Println("Unable to parse body")
+	}
+
+	result := database.DB.Delete(&models.Match{}, "`Match` = ? AND `Show` = ?", match.Match, match.Show)
+
+	if result.Error != nil {
+		c.Status(500)
+		return c.JSON(fiber.Map{
+			"message": "Failed to delete the match",
+		})
+	}
+	if result.RowsAffected == 0 {
+		c.Status(404)
+		return c.JSON(fiber.Map{
+			"message": "Match not found",
+		})
+	}
+	c.Status(200)
+	return c.JSON(fiber.Map{"message": "Success"})
 }

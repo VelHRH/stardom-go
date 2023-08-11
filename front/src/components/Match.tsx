@@ -1,4 +1,6 @@
+import { XCircle } from "lucide-react";
 import { FC } from "react";
+import { KeyedMutator } from "swr";
 import { ratingColor } from "../utils";
 
 interface MatchProps {
@@ -6,9 +8,25 @@ interface MatchProps {
  name: string;
  show: string;
  rating: number;
+ mutate: KeyedMutator<Match[]>;
 }
 
-const Match: FC<MatchProps> = ({ place, name, show, rating }) => {
+const Match: FC<MatchProps> = ({ place, name, show, rating, mutate }) => {
+ const deleteMatch = async () => {
+  const res = await fetch(`${import.meta.env.VITE_API_HOST}/match`, {
+   method: "DELETE",
+   credentials: "include",
+   headers: {
+    "Content-Type": "application/json",
+   },
+   body: JSON.stringify({
+    match: name,
+    show,
+   }),
+  });
+  const result = await res.json();
+  if (result.message === "Success") mutate();
+ };
  return (
   <div className="rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 p-1">
    <div className="w-full flex justify-between bg-slate-900 p-3 rounded-xl text-2xl font-semibold items-center">
@@ -25,6 +43,10 @@ const Match: FC<MatchProps> = ({ place, name, show, rating }) => {
     >
      {rating}
     </p>
+    <XCircle
+     onClick={() => deleteMatch()}
+     className="text-red-500/50 cursor-pointer hover:scale-110 duration-300 hover:text-red-500"
+    />
    </div>
   </div>
  );
