@@ -1,13 +1,18 @@
 import { LogIn, LogOut } from "lucide-react";
 import { FC, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import LoginForm from "./LoginForm";
 
 const Navbar: FC = () => {
+ const [searchParams] = useSearchParams();
  const [isLogIn, setIsLogIn] = useState<boolean>(false);
  const [userData, setUserData] = useState<User>();
 
  const navigate = useNavigate();
+
+ useEffect(() => {
+  if (searchParams.get("unauthorised") === "true") setIsLogIn(true);
+ }, [searchParams]);
 
  const logout = async () => {
   const res = await fetch(`${import.meta.env.VITE_API_HOST}/logout`, {

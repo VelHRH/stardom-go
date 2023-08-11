@@ -1,4 +1,5 @@
 import { FC } from "react";
+
 import SectionButton from "../components/SectionButton";
 
 const Index: FC = () => {

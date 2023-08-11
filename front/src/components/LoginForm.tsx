@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { useForm } from "react-hook-form";
+import { useSearchParams } from "react-router-dom";
 
 interface FormData {
  email: string;
@@ -8,7 +9,7 @@ interface FormData {
 
 const LoginForm: FC = () => {
  const { register, handleSubmit } = useForm<FormData>();
-
+ const [searchParams, setSearchParams] = useSearchParams();
  const onSubmit = async (data: FormData) => {
   const res = await fetch(`${import.meta.env.VITE_API_HOST}/login`, {
    method: "POST",
@@ -21,6 +22,8 @@ const LoginForm: FC = () => {
   const user = await res.json();
   if (user.message === "Success") {
    localStorage.setItem("user", JSON.stringify(user.user));
+   searchParams.delete("unauthorised");
+   setSearchParams(searchParams);
    window.location.reload();
   }
  };
