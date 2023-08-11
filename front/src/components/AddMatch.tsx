@@ -2,15 +2,8 @@ import { Loader2 } from "lucide-react";
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
 
-interface FormData {
- match: string;
- show: string;
- year: number;
- rating: number;
-}
-
 interface AddMatchProps {
- curYear: string | null;
+ curYear: number | null;
 }
 
 const AddMatch: FC<AddMatchProps> = ({ curYear }) => {
@@ -33,8 +26,8 @@ const AddMatch: FC<AddMatchProps> = ({ curYear }) => {
    },
    body: JSON.stringify(data),
   });
-  const match = await res.json();
-  if (match.message === "Success") {
+  const response = await res.json();
+  if (response.message === "Success") {
    window.location.reload();
   }
   setIsLoading(false);
@@ -107,7 +100,8 @@ const AddMatch: FC<AddMatchProps> = ({ curYear }) => {
        )}
       </div>
       <button className="w-full py-2 text-2xl font-semibold bg-gradient-to-r from-violet-500 to-fuchsia-500 text-slate-50 rounded-xl cursor-pointer hover:scale-105 duration-300 flex justify-center items-center gap-2">
-       {isLoading && <Loader2 className="animate-spin" />} Add{" "}
+       {isLoading && <Loader2 className="animate-spin" />}
+       Add
       </button>
      </form>
     </div>

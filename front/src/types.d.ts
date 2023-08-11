@@ -10,3 +10,10 @@ interface Match {
  rating: number;
  year: number;
 }
+
+interface FormData {
+ match: string;
+ show: string;
+ year: number;
+ rating: number;
+}

@@ -46,7 +46,11 @@ const Matches: FC = () => {
      All time
     </YearButton>
    </div>
-   <AddMatch curYear={searchParams.get("year")} />
+   <AddMatch
+    curYear={
+     searchParams.get("year") ? parseFloat(searchParams.get("year")!) : null
+    }
+   />
    <div className="flex flex-col gap-3 py-3">
     {data!
      .filter(
@@ -59,6 +63,7 @@ const Matches: FC = () => {
       <Match
        key={index}
        place={index + 1}
+       year={match.year}
        name={match.match}
        show={match.show}
        rating={match.rating}

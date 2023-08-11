@@ -47,16 +47,13 @@ func GetMatchesByRating(c *fiber.Ctx) error {
 }
 
 func DeleteMatch(c *fiber.Ctx) error {
-	var match struct {
-		Match string `json:"match"`
-		Show  string `json:"show"`
-	}
+	var match models.Match
 
 	if err := c.BodyParser(&match); err != nil {
 		fmt.Println("Unable to parse body")
 	}
 
-	result := database.DB.Delete(&models.Match{}, "`Match` = ? AND `Show` = ?", match.Match, match.Show)
+	result := database.DB.Delete(&models.Match{}, "`Match` = ? AND `Show` = ? AND `Year` = ? AND `Rating` = ?", match.Match, match.Show, match.Year, match.Rating)
 
 	if result.Error != nil {
 		c.Status(500)
@@ -72,4 +69,40 @@ func DeleteMatch(c *fiber.Ctx) error {
 	}
 	c.Status(200)
 	return c.JSON(fiber.Map{"message": "Success"})
+}
+
+func EditMatch(c *fiber.Ctx) error {
+	var match models.Match
+
+	if err := c.BodyParser(&match); err != nil {
+		fmt.Println("Unable to parse body")
+	}
+
+	var updatedMatch struct {
+		Match  string  `json:"newMatch"`
+		Show   string  `json:"newShow"`
+		Year   int     `json:"newYear"`
+		Rating float32 `json:"newRating"`
+	}
+
+	if err := c.BodyParser(&updatedMatch); err != nil {
+		fmt.Println("Unable to parse body")
+	}
+
+	result := database.DB.Model(&models.Match{}).Where("`Match` = ? AND `Show` = ? AND `Year` = ? AND `Rating` = ?", match.Match, match.Show, match.Year, match.Rating).Updates(updatedMatch)
+
+	if result.Error != nil {
+		c.Status(500)
+		return c.JSON(fiber.Map{
+			"message": "Failed to delete the match",
+		})
+	}
+	if result.RowsAffected == 0 {
+		c.Status(404)
+		return c.JSON(fiber.Map{
+			"message": "Match not found",
+		})
+	}
+	c.Status(200)
+	return c.JSON(fiber.Map{"message": "Success", "match": match})
 }
