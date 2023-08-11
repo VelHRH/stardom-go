@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import useSWR from "swr";
+import AddMatch from "../components/AddMatch";
 import Match from "../components/Match";
 import YearButton from "../components/YearButton";
 import { fetcher } from "../utils";
@@ -23,6 +24,7 @@ const Matches: FC = () => {
    <div className="flex my-5 gap-3 justify-center">
     {Array.from({ length: new Date().getFullYear() - 2010 + 1 }, (_, index) => (
      <YearButton
+      key={`year_${index}`}
       onClick={() => {
        searchParams.set("year", (2010 + index).toString());
        setSearchParams(searchParams);
@@ -44,6 +46,7 @@ const Matches: FC = () => {
      All time
     </YearButton>
    </div>
+   <AddMatch curYear={searchParams.get("year")} />
    <div className="flex flex-col gap-3 py-3">
     {data!
      .filter(

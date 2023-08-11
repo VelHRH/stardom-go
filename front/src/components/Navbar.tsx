@@ -32,10 +32,10 @@ const Navbar: FC = () => {
 
  useEffect(() => {
   const user = localStorage.getItem("user");
-  if (user) {
+  if (user !== null) {
    setUserData(JSON.parse(user));
   }
- }, [userData]);
+ }, []);
  return (
   <>
    {isLogIn && (
