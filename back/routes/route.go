@@ -16,4 +16,8 @@ func Setup(app *fiber.App) {
 	app.Get("/api/match/:Rating", controller.GetMatchesByRating)
 	app.Delete("/api/match", controller.DeleteMatch)
 	app.Put("/api/match", controller.EditMatch)
+	app.Get("/api/5Star", controller.GetAll5StarGP)
+	app.Post("/api/5Star", controller.Create5StarGP)
+	app.Put("/api/5Star", controller.Edit5StarGP)
+	app.Delete("/api/5Star", controller.Delete5StarGP)
 }
