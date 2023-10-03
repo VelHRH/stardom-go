@@ -94,7 +94,7 @@ func EditMatch(c *fiber.Ctx) error {
 	if result.Error != nil {
 		c.Status(500)
 		return c.JSON(fiber.Map{
-			"message": "Failed to delete the match",
+			"message": "Failed to edit the match",
 		})
 	}
 	if result.RowsAffected == 0 {

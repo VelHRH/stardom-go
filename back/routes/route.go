@@ -9,6 +9,7 @@ import (
 func Setup(app *fiber.App) {
 	app.Post("/api/register", controller.Register)
 	app.Post("/api/login", controller.Login)
+	app.Get("/api/5Star/byWrestler", controller.GetByWrestler)
 	app.Use(middleware.CheckAuth)
 	app.Get("/api/match", controller.GetAllMatches)
 	app.Post("/api/logout", controller.Logout)
@@ -20,4 +21,6 @@ func Setup(app *fiber.App) {
 	app.Post("/api/5Star", controller.Create5StarGP)
 	app.Put("/api/5Star", controller.Edit5StarGP)
 	app.Delete("/api/5Star", controller.Delete5StarGP)
+	app.Get("/api/5Star/byRating", controller.GetByRatings)
+
 }
