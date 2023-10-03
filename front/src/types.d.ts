@@ -11,6 +11,13 @@ interface Match {
  year: number;
 }
 
+interface GrandPrix {
+ wrestler1: string;
+ wrestler2: string;
+ rating: number;
+ year: number;
+}
+
 interface FormData {
  match: string;
  show: string;

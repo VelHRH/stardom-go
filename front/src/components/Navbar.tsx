@@ -50,7 +50,7 @@ const Navbar: FC = () => {
    <div className="w-full flex justify-around bg-gradient-to-r from-violet-500 to-fuchsia-500 text-8xl uppercase py-10 text-slate-50/50">
     <div className="absolute w-full h-full top-0 left-0 bg-slate-900/50 -z-10"></div>
     <a href="/" className="font-black font-outline-4 cursor-pointer">
-     Veldom
+     Stardom
     </a>
     <div className="flex gap-10 items-center">
      <a href="https://t.me/velikiyrestring">

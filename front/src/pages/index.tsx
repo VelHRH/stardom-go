@@ -6,7 +6,7 @@ const Index: FC = () => {
  return (
   <div className="flex p-16 justify-around">
    <SectionButton
-    imgUrl="https://i.ibb.co/zN4sBKK/F21-Vl9da-QAA6-CB.jpg"
+    imgUrl="https://i.ibb.co/DWZrRYq/F7-Vnf-Ytb-QAAdh-T3.jpg"
     link="/matches"
    >
     All matches
